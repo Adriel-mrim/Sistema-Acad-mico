@@ -24,5 +24,16 @@ public class Main {
             System.out.println("-------------------------");
         }
 
+        Aluno aluno = alunoController.buscarPorId(2L);
+
+        if (aluno != null) {
+            System.out.println("Aluno encontrado!");
+            System.out.println("ID: " + aluno.getId());
+            System.out.println("Nome: " + aluno.getNome());
+            System.out.println("E-mail: " + aluno.getEmail());
+        } else {
+            System.out.println("Aluno não encontrado.");
+        }
+
     }
 }
