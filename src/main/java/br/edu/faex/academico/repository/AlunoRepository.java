@@ -11,9 +11,11 @@ public class AlunoRepository {
     public void salvar(Aluno aluno){
         alunos.add(aluno);
     }
+
     public List<Aluno> listar(){
         return alunos;
     }
+
     public Aluno buscarPorId(Long id){
         for (Aluno aluno : alunos){
             if (aluno.getId().equals(id)){
@@ -22,4 +24,26 @@ public class AlunoRepository {
         }
         return null;
     }
+
+    public void excluir(Long id){
+        for (Aluno aluno : alunos){
+            if(aluno.getId().equals(id)){
+                alunos.remove(aluno);
+                return;
+            }
+        }
+    }
+
+    public void atualizar(Aluno alunoEditado){
+        for (Aluno aluno : alunos){
+            if(aluno.getId().equals(alunoEditado.getId())){
+                    aluno.setNome(alunoEditado.getNome());
+                    aluno.setEmail(alunoEditado.getEmail());
+                return;
+            }
+        }
+    }
+
+
+
 }
