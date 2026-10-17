@@ -49,7 +49,7 @@ public class AlunoService {
     public Aluno buscarPorId(Long id){
         Aluno aluno = repository.buscarPorId(id);
         if (aluno == null){
-            System.out.println("");
+            System.out.println("Aluno não encontrado.");
             return null;
         }
         return aluno;
@@ -66,29 +66,42 @@ public class AlunoService {
     }
 
     public void atualizar(Aluno alunoEditado){
-        Aluno aluno = repository.buscarPorId(alunoEditado.getId());
-        if (aluno == null){
+        if (alunoEditado == null || alunoEditado.getId() == null) {
+            System.out.println("Dados do aluno para atualização são inválidos.");
+            return;
+        }
+
+        Aluno alunoExistente = repository.buscarPorId(alunoEditado.getId());
+        if (alunoExistente == null){
             System.out.println("Aluno não encontrado.");
             return;
         }
-        if (aluno.getNome() == null || aluno.getNome().isBlank()) {
+
+        if (alunoEditado.getNome() == null || alunoEditado.getNome().isBlank()) {
             System.out.println("O nome do aluno é obrigatório.");
             return;
         }
 
-        if (aluno.getEmail() == null || aluno.getEmail().isBlank()) {
+        if (alunoEditado.getEmail() == null || alunoEditado.getEmail().isBlank()) {
             System.out.println("O e-mail do aluno é obrigatório.");
             return;
         }
 
-        if (!aluno.getEmail().contains("@")) {
+        if (!alunoEditado.getEmail().contains("@")) {
             System.out.println("E-mail inválido.");
             return;
         }
+
+        boolean emailEmUsoPorOutro = repository.listar().stream()
+                .anyMatch(a -> !a.getId().equals(alunoEditado.getId())
+                        && a.getEmail().equalsIgnoreCase(alunoEditado.getEmail()));
+
+        if (emailEmUsoPorOutro) {
+            System.out.println("E-mail já cadastrado.");
+            return;
+        }
+
         repository.atualizar(alunoEditado);
         System.out.println("Aluno atualizado com sucesso.");
     }
-
-
-
 }
