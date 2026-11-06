@@ -6,6 +6,7 @@ import br.edu.faex.academico.model.Aluno;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +33,27 @@ public class AlunoRepository {
     }
 
     public List<Aluno> listar(){
+        //return alunos;
+        List<Aluno> alunos = new ArrayList<>();
+        String sql = "SELECT * FROM alunos";
+        try {
+            Connection conexao = Conexao.conectar();
+            PreparedStatement comando = conexao.prepareStatement(sql);
+            ResultSet resultado = comando.executeQuery();
+            while (resultado.next()){
+                Aluno aluno = new Aluno();
+                aluno.setId(resultado.getLong("id"));
+                aluno.setNome(resultado.getString("nome"));
+                aluno.setEmail(resultado.getString("email"));
+                aluno.setAtivo(resultado.getBoolean("ativo"));
+                alunos.add(aluno);
+            }
+            resultado.close();
+            comando.close();
+            conexao.close();
+        } catch (SQLException e) {
+            System.out.println("Erro ao listar: " + e.getMessage());
+        }
         return alunos;
 
     }
