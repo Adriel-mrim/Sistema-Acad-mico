@@ -1,14 +1,23 @@
 package br.edu.faex.academico;
 
 import br.edu.faex.academico.controller.AlunoController;
+import br.edu.faex.academico.controller.CursoController;
+import br.edu.faex.academico.controller.ProfessorController;
 import br.edu.faex.academico.model.Aluno;
+import br.edu.faex.academico.model.Curso;
+import br.edu.faex.academico.model.Professor;
 import br.edu.faex.academico.repository.AlunoRepository;
+import br.edu.faex.academico.repository.CursoRepository;
+import br.edu.faex.academico.repository.ProfessorRepository;
 import br.edu.faex.academico.service.AlunoService;
+import br.edu.faex.academico.service.CursoService;
+import br.edu.faex.academico.service.ProfessorService;
 
 import java.util.List;
 
 public class Main {
-    static void main() {
+    public static void main(String[] args) {
+
         Aluno aluno1 = new Aluno("Aleandro Lima", "aleandro.lima2@faex.edu.br");
         Aluno aluno2 = new Aluno("Maria Lima", "maria.lima2@faex.edu.br");
         Aluno aluno3 = new Aluno("José Lima", "jose.lima2@faex.edu.br");
@@ -16,16 +25,13 @@ public class Main {
         AlunoRepository repository = new AlunoRepository();
         AlunoService service = new AlunoService(repository);
         AlunoController controller = new AlunoController(service);
-        //Cadastro de Alunos BD
+
         controller.cadastrar(aluno1);
         controller.cadastrar(aluno2);
         controller.cadastrar(aluno3);
 
-        // Listar Alunos BD
         System.out.println("\n===== LISTA DE ALUNOS =====");
-
         List<Aluno> alunos = controller.listar();
-
         for (Aluno aluno : alunos) {
             System.out.println("ID: " + aluno.getId());
             System.out.println("Nome: " + aluno.getNome());
@@ -42,6 +48,56 @@ public class Main {
             System.out.println("E-mail: " + aluno.getEmail());
         } else {
             System.out.println("Aluno não encontrado!");
+        }
+
+
+        CursoRepository cursoRepository = new CursoRepository();
+        CursoService cursoService = new CursoService(cursoRepository);
+        CursoController cursoController = new CursoController(cursoService);
+
+        Curso curso1 = new Curso("Análise e Desenvolvimento de Sistemas", "Presencial");
+        Curso curso2 = new Curso("Sistemas de Informação", "EAD");
+        cursoController.cadastrar(curso1);
+        cursoController.cadastrar(curso2);
+
+        System.out.println("\n===== LISTA DE CURSOS =====");
+        List<Curso> cursos = cursoController.listar();
+        for (Curso curso : cursos) {
+            System.out.println("ID: " + curso.getId());
+            System.out.println("Nome: " + curso.getNome());
+            System.out.println("Modalidade: " + curso.getModalidade());
+            System.out.println("--------------------------");
+        }
+
+        if (!cursos.isEmpty()) {
+            Long idCurso = cursos.get(0).getId();
+            cursoController.excluir(idCurso);
+            System.out.println("\nCurso excluído!");
+        }
+
+
+        ProfessorRepository professorRepository = new ProfessorRepository();
+        ProfessorService professorService = new ProfessorService(professorRepository);
+        ProfessorController professorController = new ProfessorController(professorService);
+
+        Professor professor1 = new Professor("Carlos Oliveira", "carlos.oliveira@faex.edu.br");
+        Professor professor2 = new Professor("Ana Souza", "ana.souza@faex.edu.br");
+        professorController.cadastrar(professor1);
+        professorController.cadastrar(professor2);
+
+        System.out.println("\n===== LISTA DE PROFESSORES =====");
+        List<Professor> professores = professorController.listar();
+        for (Professor professor : professores) {
+            System.out.println("ID: " + professor.getId());
+            System.out.println("Nome: " + professor.getNome());
+            System.out.println("E-mail: " + professor.getEmail());
+            System.out.println("--------------------------");
+        }
+
+        if (!professores.isEmpty()) {
+            Long idProfessor = professores.get(0).getId();
+            professorController.excluir(idProfessor);
+            System.out.println("\nProfessor excluído!");
         }
     }
 }
